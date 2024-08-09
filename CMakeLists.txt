@@ -6,9 +6,12 @@ else ()
     message(FATAL_ERROR "TODO: Указать папку в которой будет храниться vcpkg на других ОС")
 endif ()
 
-project(another-mc VERSION 0.0.0)
-
+set(PROJECT_NAME "another-mc")
+set(PROJECT_VERSION 0.0.0)
 include(cmake/vcpkg.cmake)
+
+project(${PROJECT_NAME} VERSION ${PROJECT_VERSION})
+
 vcpkg_add_package(glfw3)
 
 set(CMAKE_CXX_STANDARD 23)
@@ -19,6 +22,12 @@ file(GLOB_RECURSE PROJECT_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
 add_executable(${PROJECT_NAME})
 
+# Compiler options
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    target_compile_options(${PROJECT_NAME} PRIVATE "/MP")
+endif ()
+
+# Sources
 target_sources(${PROJECT_NAME} PRIVATE
         ${PROJECT_HEADERS}
         ${PROJECT_SOURCE_HEADERS}
@@ -26,6 +35,6 @@ target_sources(${PROJECT_NAME} PRIVATE
 )
 target_include_directories(${PROJECT_NAME} PRIVATE src/)
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    target_compile_options(${PROJECT_NAME} PRIVATE "/MP")
-endif ()
+# Libraries
+find_package(glfw3 CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE glfw)

@@ -12,6 +12,7 @@ include(cmake/vcpkg.cmake)
 
 project(${PROJECT_NAME} VERSION ${PROJECT_VERSION})
 
+vcpkg_add_package(opengl)
 vcpkg_add_package(glfw3)
 vcpkg_add_package(glew)
 
@@ -28,6 +29,10 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_options(${PROJECT_NAME} PRIVATE "/MP")
 endif ()
 
+# Compiler definitions
+string(REPLACE "\\" "/" ASSERT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/assets")
+target_compile_definitions(${PROJECT_NAME} PRIVATE "ASSERT_DIR=\"${ASSERT_DIR}\"")
+
 # Sources
 target_sources(${PROJECT_NAME} PRIVATE
         ${PROJECT_HEADERS}
@@ -37,6 +42,9 @@ target_sources(${PROJECT_NAME} PRIVATE
 target_include_directories(${PROJECT_NAME} PRIVATE src/)
 
 # Libraries
+find_package(OpenGL REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE OpenGL::GL)
+
 find_package(glfw3 CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
 

@@ -6,9 +6,10 @@ else ()
     message(FATAL_ERROR "TODO: Указать папку в которой будет храниться vcpkg на других ОС")
 endif ()
 
-include(cmake/vcpkg.cmake)
+project(another-mc VERSION 0.0.0)
 
-project(AMC)
+include(cmake/vcpkg.cmake)
+vcpkg_add_package(glfw3)
 
 set(CMAKE_CXX_STANDARD 23)
 

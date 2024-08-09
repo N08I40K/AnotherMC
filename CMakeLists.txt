@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.29)
 
 set(VCPKG_PARENT_DIR "${CMAKE_SOURCE_DIR}")
-set(VCPKG_TARGET_TRIPLET "x64-windows-static")
+set(VCPKG_TARGET_TRIPLET "x64-windows")
 include(cmake/vcpkg.cmake)
 
 project(AMC)
@@ -22,5 +22,5 @@ target_sources(${PROJECT_NAME} PRIVATE
 target_include_directories(${PROJECT_NAME} PRIVATE src/)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    target_compile_options(${PROJECT_NAME} PRIVATE "/MP") # Многопоточная компиляция
+    target_compile_options(${PROJECT_NAME} PRIVATE "/MP")
 endif ()

@@ -13,6 +13,7 @@ include(cmake/vcpkg.cmake)
 project(${PROJECT_NAME} VERSION ${PROJECT_VERSION})
 
 vcpkg_add_package(glfw3)
+vcpkg_add_package(glew)
 
 set(CMAKE_CXX_STANDARD 23)
 
@@ -38,3 +39,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE src/)
 # Libraries
 find_package(glfw3 CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
+
+find_package(GLEW REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE GLEW::GLEW)

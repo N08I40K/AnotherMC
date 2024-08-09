@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 3.29)
 
-set(VCPKG_PARENT_DIR "${CMAKE_SOURCE_DIR}")
-set(VCPKG_TARGET_TRIPLET "x64-windows")
+if (WIN32)
+    string(REPLACE "\\" "/" VCPKG_PARENT_DIR "$ENV{USERPROFILE}")
+else ()
+    message(FATAL_ERROR "TODO: Указать папку в которой будет храниться vcpkg на других ОС")
+endif ()
+
 include(cmake/vcpkg.cmake)
 
 project(AMC)

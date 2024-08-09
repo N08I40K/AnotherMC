@@ -5,8 +5,8 @@
 # Copyright (C) 2022, Arne Wendt
 #
 
-# vcpkg examples use 3.0.0, assuming this as minimum version for vcpkg cmake toolchain
-cmake_minimum_required(VERSION 3.0.0)
+# vcpkg examples use 3.5.0, assuming this as minimum version for vcpkg cmake toolchain
+cmake_minimum_required(VERSION 3.5.0)
 
 # config:
 # - VCPKG_VERSION:
@@ -92,7 +92,7 @@ function(vcpkg_init)
             # mask musl-libc from vcpkg
             vcpkg_mask_if_musl_libc()
         else()
-            message(WARNING "One of VCPKG_TARGET_TRIPLET, ENV{VCPKG_DEFAULT_TRIPLET} or ENV{VCPKG_DEFAULT_HOST_TRIPLET} has been defined. NOT CHECKING FOR musl-libc MASKING!")
+            message(DEBUG "One of VCPKG_TARGET_TRIPLET, ENV{VCPKG_DEFAULT_TRIPLET} or ENV{VCPKG_DEFAULT_HOST_TRIPLET} has been defined. NOT CHECKING FOR musl-libc MASKING!")
         endif()
 
 

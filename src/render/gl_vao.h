@@ -5,46 +5,50 @@
 #ifndef GL_VAO_H
 #define GL_VAO_H
 #include <memory>
+#include <vector>
 #include <GL/glew.h>
-
-#include "gl_ebo.h"
-#include "gl_vbo.h"
 
 class gl_vao {
 	GLuint vao{};
 
-	gl_vbo vbo;
-	gl_ebo ebo;
+	GLuint vbo{};
+	GLuint ebo{};
 
-public:
-	explicit
-	gl_vao(
-		gl_vbo vbo,
-		gl_ebo ebo);
-
-	gl_vao(
-		const gl_vao& other) = delete;
-
-	gl_vao(
-		gl_vao&& other) noexcept;
-
-	gl_vao&
-	operator=(
-		gl_vao other);
-
-	~gl_vao();
+	GLsizei vbo_size{};
+	GLsizei ebo_size{};
 
 	void
-	configure();
+	create_vbo(
+		const GLfloat* vertices,
+		size_t         count);
+	void
+	create_ebo(
+		const GLuint* indices,
+		size_t        count);
+
+public:
+	gl_vao(
+		const GLfloat* vertices,
+		size_t         vertices_count,
+		const GLuint*  indices,
+		size_t         indices_count);
+
+	~gl_vao();
 
 	[[nodiscard]] GLuint
 	get_vao() const { return vao; }
 
-	[[nodiscard]] const gl_vbo&
+	[[nodiscard]] GLuint
 	get_vbo() const { return vbo; }
 
-	[[nodiscard]] const gl_ebo&
+	[[nodiscard]] GLuint
 	get_ebo() const { return ebo; }
+
+	[[nodiscard]] GLsizei
+	get_vbo_size() const { return vbo_size; }
+
+	[[nodiscard]] GLsizei
+	get_ebo_size() const { return ebo_size; }
 };
 
 using gl_vao_ptr = std::unique_ptr<gl_vao>;

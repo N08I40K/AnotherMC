@@ -4,6 +4,7 @@
 
 #ifndef GL_EBO_H
 #define GL_EBO_H
+#include <memory>
 #include <vector>
 #include <GL/glew.h>
 
@@ -18,7 +19,7 @@ private:
 public:
 	explicit
 	gl_ebo(
-		VecT&& indices);
+		VecT  indices);
 
 	gl_ebo(
 		const gl_ebo& other) = delete;
@@ -35,11 +36,15 @@ public:
 	void
 	configure();
 
+	void set_slot(const char* name, GLuint index);
+
 	[[nodiscard]] GLuint
 	get_ebo() const;
 
 	[[nodiscard]] VecT
 	get_indices() const;
 };
+
+using gl_ebo_ptr = std::unique_ptr<gl_ebo>;
 
 #endif //GL_EBO_H

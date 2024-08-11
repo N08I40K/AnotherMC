@@ -4,7 +4,7 @@
 
 #ifndef GL_VAO_H
 #define GL_VAO_H
-#include <optional>
+#include <memory>
 #include <GL/glew.h>
 
 #include "gl_ebo.h"
@@ -13,14 +13,14 @@
 class gl_vao {
 	GLuint vao{};
 
-	gl_vbo                vbo;
-	std::optional<gl_ebo> ebo;
+	gl_vbo vbo;
+	gl_ebo ebo;
 
 public:
 	explicit
 	gl_vao(
-		gl_vbo&&                vbo,
-		std::optional<gl_ebo>&& ebo);
+		gl_vbo vbo,
+		gl_ebo ebo);
 
 	gl_vao(
 		const gl_vao& other) = delete;
@@ -37,8 +37,16 @@ public:
 	void
 	configure();
 
-	void
-	draw() const;
+	[[nodiscard]] GLuint
+	get_vao() const { return vao; }
+
+	[[nodiscard]] const gl_vbo&
+	get_vbo() const { return vbo; }
+
+	[[nodiscard]] const gl_ebo&
+	get_ebo() const { return ebo; }
 };
+
+using gl_vao_ptr = std::unique_ptr<gl_vao>;
 
 #endif //GL_VAO_H

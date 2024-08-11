@@ -14,7 +14,7 @@ class gl_vbo {
 public:
 	explicit
 	gl_vbo(
-		std::vector<GLfloat>&& vertices);
+		std::vector<GLfloat> vertices);
 
 	gl_vbo(
 		const gl_vbo& other) = delete;

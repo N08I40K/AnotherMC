@@ -5,9 +5,10 @@
 #include "gl_ebo.h"
 
 #include <cassert>
+#include <utility>
 
 gl_ebo::gl_ebo(
-	VecT&& indices)
+	VecT  indices)
 	: indices(std::move(indices)) {
 	assert(!this->indices.empty());
 	assert((this->indices.size() % 3) == 0);

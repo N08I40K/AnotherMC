@@ -5,8 +5,8 @@
 #include "gl_vao.h"
 
 gl_vao::gl_vao(
-	gl_vbo&&                vbo,
-	std::optional<gl_ebo>&& ebo)
+	gl_vbo vbo,
+	gl_ebo ebo)
 	: vbo(std::move(vbo))
 	, ebo(std::move(ebo)) {}
 
@@ -36,24 +36,8 @@ gl_vao::configure() {
 
 	glBindVertexArray(vao);
 
-	if (ebo.has_value())
-		ebo->configure();
+	ebo.configure();
 	vbo.configure();
-
-	glBindVertexArray(0);
-}
-
-void
-gl_vao::draw() const {
-	glBindVertexArray(vao);
-
-	if (ebo) {
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo->get_ebo());
-		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(ebo->get_indices().size()), GL_UNSIGNED_INT, nullptr);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	}
-	else
-		glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(vbo.get_vertices().size()));
 
 	glBindVertexArray(0);
 }

@@ -15,6 +15,9 @@ project(${PROJECT_NAME} VERSION ${PROJECT_VERSION})
 vcpkg_add_package(opengl)
 vcpkg_add_package(glfw3)
 vcpkg_add_package(glew)
+vcpkg_add_package(soil)
+vcpkg_add_package(glm)
+vcpkg_add_package(range-v3)
 
 set(CMAKE_CXX_STANDARD 23)
 
@@ -50,3 +53,12 @@ target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
 
 find_package(GLEW REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE GLEW::GLEW)
+
+find_package(soil CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE soil)
+
+find_package(glm CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE glm::glm)
+
+find_package(range-v3 CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE range-v3::meta range-v3::concepts range-v3::range-v3)

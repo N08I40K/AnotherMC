@@ -5,9 +5,10 @@
 #include "gl_vbo.h"
 
 #include <cassert>
+#include <utility>
 
 gl_vbo::gl_vbo(
-	std::vector<GLfloat>&& vertices)
+	std::vector<GLfloat> vertices)
 	: vertices(std::move(vertices)) {
 	assert(!this->vertices.empty());
 	assert((this->vertices.size() % 3) == 0);
@@ -41,8 +42,22 @@ gl_vbo::configure() {
 	             vertices.data(),
 	             GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), nullptr);
+	// 3 GLfloat - pos
+	// 4 GLfloat - color
+	// 2 GLfloat - uv
+
+	// GLfloat 9 - sum
+
+	constexpr GLuint stride = 9 * sizeof(GLfloat);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<GLvoid*>(0 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<GLvoid*>(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<GLvoid*>(7 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(2);
 }
 
 const std::vector<GLfloat>&

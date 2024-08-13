@@ -59,10 +59,12 @@ public:
 		winding_order order);
 
 	static void
+	set_depth_test(
+		bool enabled);
+
+	static void
 	render(
 		GLsizei count);
 };
-
-
 
 #endif //GL_RENDER_ENGINE_H

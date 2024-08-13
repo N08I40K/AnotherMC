@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+message chunk_position {
+  int32 x = 1;
+  int32 z = 2;
+}
+

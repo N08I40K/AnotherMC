@@ -83,5 +83,14 @@ gl_render_engine::set_winding_order(
 }
 
 void
+gl_render_engine::set_depth_test(
+	const bool enabled) {
+	if (enabled)
+		glEnable(GL_DEPTH_TEST);
+	else
+		glDisable(GL_DEPTH_TEST);
+}
+
+void
 gl_render_engine::render(
 	const GLsizei count) { glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr); }

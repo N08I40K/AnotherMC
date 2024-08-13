@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+import "chunk_position.proto";
+
+message block {
+  uint32 id = 1;
+}
+
+message block_state {
+  bytes states = 1;
+}
+
+message s2c_load_chunk {
+  chunk_position position = 1;
+  repeated block blocks = 2;
+  repeated block_state states = 3;
+}

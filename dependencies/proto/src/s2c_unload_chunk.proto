@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+import "chunk_position.proto";
+
+message s2c_unload_chunk {
+  chunk_position position = 1;
+}

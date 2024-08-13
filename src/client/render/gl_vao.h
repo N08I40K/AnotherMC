@@ -5,7 +5,6 @@
 #ifndef GL_VAO_H
 #define GL_VAO_H
 #include <memory>
-#include <vector>
 #include <GL/glew.h>
 
 class gl_vao {

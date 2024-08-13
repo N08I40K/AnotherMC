@@ -18,6 +18,8 @@ vcpkg_add_package(glew)
 vcpkg_add_package(soil)
 vcpkg_add_package(glm)
 vcpkg_add_package(range-v3)
+vcpkg_add_package(boost)
+vcpkg_add_package(protobuf)
 
 set(CMAKE_CXX_STANDARD 23)
 
@@ -62,3 +64,22 @@ target_link_libraries(${PROJECT_NAME} PRIVATE glm::glm)
 
 find_package(range-v3 CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE range-v3::meta range-v3::concepts range-v3::range-v3)
+
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_STATIC_RUNTIME OFF)
+set(Boost_USE_MULTITHREADED ON)
+if (MSVC)
+    add_compile_definitions(_WIN32_WINNT=0x0601)
+endif ()
+
+find_package(Boost REQUIRED COMPONENTS system thread)
+if (NOT Boost_FOUND)
+    message(FATAL_ERROR "Boost not found!")
+endif ()
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${Boost_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${Boost_LIBRARIES})
+
+find_package(protobuf CONFIG REQUIRED)
+add_subdirectory("dependencies/proto")
+target_link_libraries(${PROJECT_NAME} PRIVATE another-mc-proto)

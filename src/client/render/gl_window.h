@@ -12,12 +12,16 @@ class gl_window {
 
 	bool
 	init_glfw(
-		GLFWkeyfun key_callback);
+		GLFWkeyfun         key_callback,
+		GLFWcursorposfun   mouse_pos_callback,
+		GLFWmousebuttonfun mouse_button_callback);
 
 public:
 	explicit
 	gl_window(
-		GLFWkeyfun key_callback);
+		GLFWkeyfun         key_callback,
+		GLFWcursorposfun   mouse_pos_callback,
+		GLFWmousebuttonfun mouse_button_callback);
 
 	[[nodiscard]] GLFWwindow*
 	get_window() const;

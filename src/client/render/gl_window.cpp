@@ -9,7 +9,9 @@
 
 bool
 gl_window::init_glfw(
-	const GLFWkeyfun key_callback) {
+	const GLFWkeyfun         key_callback,
+	const GLFWcursorposfun   mouse_pos_callback,
+	const GLFWmousebuttonfun mouse_button_callback) {
 	glfwInit();
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -25,14 +27,19 @@ gl_window::init_glfw(
 		return false;
 	}
 	glfwMakeContextCurrent(window);
+
 	glfwSetKeyCallback(window, key_callback);
+	glfwSetMouseButtonCallback(window, mouse_button_callback);
+	glfwSetCursorPosCallback(window, mouse_pos_callback);
 
 	return true;
 }
 
 gl_window::gl_window(
-	const GLFWkeyfun key_callback) {
-	if (!init_glfw(key_callback))
+	const GLFWkeyfun         key_callback,
+	const GLFWcursorposfun   mouse_pos_callback,
+	const GLFWmousebuttonfun mouse_button_callback) {
+	if (!init_glfw(key_callback, mouse_pos_callback, mouse_button_callback))
 		return;
 
 	glewExperimental = GL_TRUE;

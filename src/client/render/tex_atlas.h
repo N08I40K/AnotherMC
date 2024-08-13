@@ -100,7 +100,7 @@ public:
 	[[nodiscard]] glm::szvec2
 	get_size() const { return size; }
 
-	[[nodiscard]] std::map<std::string, glm::vec4>
+	[[nodiscard]] const std::map<std::string, glm::vec4>&
 	get_uvs() const { return uvs; }
 };
 

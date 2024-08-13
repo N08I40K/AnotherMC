@@ -9,10 +9,10 @@
 
 namespace block_faces {
 static constexpr std::array<size_t, 8> FACE_UV{
-	0, 1,
-	0, 3,
+	2, 1,
 	2, 3,
-	2, 1
+	0, 3,
+	0, 1
 };
 
 static constexpr std::array ALL_VERTICES_POS{
@@ -53,16 +53,16 @@ static constexpr std::array<GLfloat, static_cast<size_t>(6 * 24)> ALL_VERTICES{
 	VERTICE_PACK(4), 0, 0,
 
 	// right
-	VERTICE_PACK(3), 0, 0,
-	VERTICE_PACK(2), 0, 0,
-	VERTICE_PACK(5), 0, 0,
-	VERTICE_PACK(4), 0, 0,
-
-	// left
 	VERTICE_PACK(7), 0, 0,
 	VERTICE_PACK(6), 0, 0,
 	VERTICE_PACK(1), 0, 0,
 	VERTICE_PACK(0), 0, 0,
+
+	// left
+	VERTICE_PACK(3), 0, 0,
+	VERTICE_PACK(2), 0, 0,
+	VERTICE_PACK(5), 0, 0,
+	VERTICE_PACK(4), 0, 0,
 };
 #undef VERTICE_PACK
 

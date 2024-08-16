@@ -21,7 +21,21 @@ class server_session {
 	server_session(
 		boost::asio::ip::tcp::socket socket);
 
-	void read_header();
+	void
+	receive_header_callback(
+		const boost::system::error_code&  error,
+		[[maybe_unused]] size_t           bytes_transferred,
+		std::unique_ptr<transfer_context> transfer_context);
+	void
+	receive_data_callback(
+		const boost::system::error_code&  error,
+		[[maybe_unused]] size_t           bytes_transferred,
+		std::unique_ptr<transfer_context> transfer_context);
+
+	void
+	send_packet_callback(
+		const boost::system::error_code& error,
+		[[maybe_unused]] size_t          bytes_transferred);
 
 public:
 	static std::unique_ptr<server_session>
@@ -34,6 +48,9 @@ public:
 	void
 	send(
 		transfer_context& transfer_ctx);
+
+	void
+	receive();
 };
 } // network
 

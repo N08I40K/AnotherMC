@@ -18,7 +18,7 @@ server_session::server_session(
 void
 server_session::receive_header_callback(
 	const boost::system::error_code&  error,
-	size_t                            bytes_transferred,
+	[[maybe_unused]] size_t           bytes_transferred,
 	std::unique_ptr<transfer_context> transfer_context) {
 	if (error)
 		throw boost::system::system_error(error);
@@ -54,7 +54,8 @@ server_session::receive_data_callback(
 }
 
 void
-server_session::send_packet_callback(
+// ReSharper disable once CppMemberFunctionMayBeStatic
+server_session::send_packet_callback( // NOLINT(*-convert-member-functions-to-static)
 	const boost::system::error_code& error,
 	[[maybe_unused]] size_t          bytes_transferred) {
 	if (error)

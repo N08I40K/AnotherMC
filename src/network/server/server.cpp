@@ -24,7 +24,8 @@ server::start_accept() {
 }
 
 void
-server::accept_callback(
+// ReSharper disable once CppMemberFunctionMayBeStatic
+server::accept_callback( // NOLINT(*-convert-member-functions-to-static)
 	const boost::system::error_code& ec,
 	tcp::socket                      sock) {
 	if (ec)
@@ -42,8 +43,11 @@ server::thread() {
 }
 
 void
-server::start_thread() {}
+server::start_thread() { io_thread = std::thread(&server::thread); }
 
 void
-server::stop_thread() {}
+server::stop_thread() {
+	io_context.stop();
+	io_thread.join();
+}
 } // network

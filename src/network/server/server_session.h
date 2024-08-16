@@ -37,6 +37,9 @@ class server_session {
 		const boost::system::error_code& error,
 		[[maybe_unused]] size_t          bytes_transferred);
 
+	void
+	receive();
+
 public:
 	static std::unique_ptr<server_session>
 	create(
@@ -48,9 +51,6 @@ public:
 	void
 	send(
 		transfer_context& transfer_ctx);
-
-	void
-	receive();
 };
 } // network
 

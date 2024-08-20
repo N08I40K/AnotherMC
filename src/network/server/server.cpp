@@ -37,16 +37,20 @@ server::accept_callback( // NOLINT(*-convert-member-functions-to-static)
 void
 server::thread() {
 	std::println("Server thread started!");
-	while (!io_context.stopped())
+	while (!stop)
 		io_context.run();
 	std::println("Server thread stopped!");
 }
 
 void
-server::start_thread() { io_thread = std::thread(&server::thread); }
+server::start_thread() {
+	stop = false;
+	io_thread = std::thread(&server::thread, this);
+}
 
 void
 server::stop_thread() {
+	stop = true;
 	io_context.stop();
 	io_thread.join();
 }

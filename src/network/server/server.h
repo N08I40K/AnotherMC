@@ -14,16 +14,19 @@ class server {
 	boost::asio::io_context        io_context;
 	boost::asio::ip::tcp::acceptor acceptor;
 
+	bool        stop{};
 	std::thread io_thread;
 
-	void start_accept();
+	void
+	start_accept();
 
 	void
 	accept_callback(
 		const boost::system::error_code& ec,
 		boost::asio::ip::tcp::socket     sock);
 
-	void thread();
+	void
+	thread();
 
 public:
 	server(

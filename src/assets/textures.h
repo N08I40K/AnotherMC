@@ -4,7 +4,7 @@
 
 #ifndef TEXTURES_H
 #define TEXTURES_H
-#include "render/tex_atlas.h"
+#include "client/render/tex_atlas.h"
 
 namespace assets {
 class textures {

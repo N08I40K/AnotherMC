@@ -14,8 +14,8 @@ class registries {
 	registry<entity> entities;
 
 public:
-	registries()  = default;
-	~registries() = default;
+	registries();
+	~registries();
 
 	[[nodiscard]] const registry<block>&
 	get_blocks() const;

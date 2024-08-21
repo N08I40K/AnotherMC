@@ -10,11 +10,24 @@
 
 namespace stdn {
 template <class T>
+concept brstream_readable_buffer = requires(
+	const T& t) {
+			{ sizeof(*t.data()) == sizeof(uint8_t) };
+			{ t.size() } -> std::convertible_to<size_t>;
+		};
+
+template <class T>
 concept brstream_readable_container = requires(
 	const T& t) {
 			{ t.begin() };
 			{ t.end() };
 			{ t.size() } -> std::convertible_to<size_t>;
+		};
+
+template <class T>
+concept bwstream_writeable_buffer = requires(
+	T& t) {
+			{ t.data() };
 		};
 
 template <class T>
@@ -24,26 +37,30 @@ concept bwstream_writeable_container = requires(
 		};
 
 class brstream {
-	const std::vector<uint8_t>& buffer;
-	size_t                      read_pos{};
+	const uint8_t* buffer;
+	const size_t   buffer_size;
+	size_t         read_pos{};
 
 public:
+	template <brstream_readable_buffer BufferT>
 	explicit
 	brstream(
-		const std::vector<uint8_t>& buffer) : buffer(buffer) {}
+		const BufferT& buffer)
+		: buffer(reinterpret_cast<const uint8_t*>(buffer.data()))
+		, buffer_size(buffer.size()) {}
 
 	template <bwstream_writeable_container T>
 	brstream&
 	operator>>(
 		T& val) {
-		if (read_pos + sizeof(size_t) > buffer.size())
+		if (read_pos + sizeof(size_t) > buffer_size)
 			throw std::out_of_range("brstream::operator>>");
 
 		size_t size;
 		*this >> size;
 
 		const auto binary_size = size * sizeof(*val.begin());
-		if (read_pos + binary_size > buffer.size())
+		if (read_pos + binary_size > buffer_size)
 			throw std::out_of_range("brstream::operator>>");
 
 		if constexpr (stdn::has_resize_v<T>)
@@ -65,7 +82,7 @@ public:
 	brstream&
 	operator>>(
 		T& val) {
-		if (read_pos + sizeof(T) > buffer.size())
+		if (read_pos + sizeof(T) > buffer_size)
 			throw std::out_of_range("brstream::operator>>");
 
 		memcpy(&val, &buffer[read_pos], sizeof(T));
@@ -112,8 +129,18 @@ public:
 	[[nodiscard]] const std::vector<uint8_t>&
 	get_buffer() const { return data; }
 
-	[[nodiscard]] std::vector<uint8_t>
-	take_result() { return std::move(data); }
+	template <bwstream_writeable_buffer BufferT>
+	[[nodiscard]] BufferT
+	take_result() {
+		static_assert(stdn::has_resize_v<BufferT>);
+		BufferT buffer;
+		static_assert(sizeof(*buffer.data()) == sizeof(*data.data()));
+
+		buffer.resize(data.size());
+		memcpy(buffer.data(), data.data(), data.size());
+
+		return std::move(buffer);
+	}
 };
 }
 

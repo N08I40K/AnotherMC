@@ -17,30 +17,32 @@ server_session::server_session(
 
 void
 server_session::receive_header_callback(
-	const boost::system::error_code&  error,
-	[[maybe_unused]] size_t           bytes_transferred,
-	std::unique_ptr<transfer_context> transfer_context) {
+	const boost::system::error_code& error,
+	[[maybe_unused]] size_t          bytes_transferred,
+	packet_t                         packet) {
 	if (error)
 		throw boost::system::system_error(error);
 
-	auto& receive_buffer = transfer_context->get_data_for_receive();
+	auto& receive_buffer = packet->get_data_for_receive();
+
+	auto callback = [this, packet_raw = packet.release()](
+		auto cb_error,
+		auto cb_bytes_transferred) {
+		this->receive_data_callback(cb_error, cb_bytes_transferred, packet_t(packet_raw));
+	};
 	async_read(
 		socket,
 		buffer(receive_buffer.data(), receive_buffer.size()),
 		transfer_all(),
-		[this, transfer_context](
-	auto cb_error,
-	auto cb_bytes_transferred) {
-			this->receive_data_callback(cb_error, cb_bytes_transferred, std::move(transfer_context));
-		}
+		callback
 	);
 }
 
 void
 server_session::receive_data_callback(
-	const boost::system::error_code&  error,
-	[[maybe_unused]] size_t           bytes_transferred,
-	std::unique_ptr<transfer_context> transfer_context) {
+	const boost::system::error_code& error,
+	[[maybe_unused]] size_t          bytes_transferred,
+	packet_t                         transfer_context) {
 	if (error)
 		throw boost::system::system_error(error);
 
@@ -62,9 +64,9 @@ server_session::send_packet_callback( // NOLINT(*-convert-member-functions-to-st
 		throw boost::system::system_error(error);
 }
 
-std::unique_ptr<server_session>
+std::shared_ptr<server_session>
 server_session::create(
-	tcp::socket socket) { return std::unique_ptr<server_session>(new server_session(std::move(socket))); }
+	tcp::socket socket) { return std::shared_ptr<server_session>(new server_session(std::move(socket))); }
 
 void
 server_session::start() { receive(); }
@@ -83,18 +85,24 @@ server_session::send(
 	            });
 }
 
+std::vector<packet_t>
+server_session::get_received_packets() {
+	std::lock_guard lock(mutex);
+	return std::move(received_packets);
+}
+
 void
 server_session::receive() {
-	auto transfer_context = transfer_context::create_receive();
+	auto packet = transfer_context::create_receive();
 
-	size_t& size_for_receive = transfer_context->get_size_for_receive();
+	size_t& size_for_receive = packet->get_size_for_receive();
 	async_read(socket,
 	           buffer(&size_for_receive, sizeof(size_for_receive)),
 	           transfer_all(),
-	           [this, transfer_context](
+	           [this, packet = std::move(packet)](
            auto error,
-           auto bytes_transferred) {
-		           this->receive_header_callback(error, bytes_transferred, std::move(transfer_context));
+           auto bytes_transferred) mutable {
+		           this->receive_header_callback(error, bytes_transferred, std::move(packet));
 	           });
 }
 } // network

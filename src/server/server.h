@@ -4,10 +4,29 @@
 
 #ifndef SERVER_H
 #define SERVER_H
+#include <memory>
+
 #include "world/world.h"
 
+class server_player;
+
+namespace network {
+class server_session;
+}
+
+namespace network {
+class server;
+}
+
 class server {
-	world world;
+	world                            world;
+	std::unique_ptr<network::server> network;
+
+	void
+	on_new_connection(
+		std::shared_ptr<network::server_session> session);
+
+	std::vector<std::shared_ptr<server_player> > players;
 
 public:
 	server();
@@ -16,7 +35,8 @@ public:
 	[[nodiscard]] ::world&
 	get_world() { return world; }
 
-	void tick();
+	void
+	tick();
 };
 
 #endif //SERVER_H

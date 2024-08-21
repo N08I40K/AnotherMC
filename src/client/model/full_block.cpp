@@ -9,7 +9,7 @@
 #include <stdexcept>
 #include <glm/vec4.hpp>
 
-#include "objects/block_faces.h"
+#include "client/objects/block_faces.h"
 
 namespace models {
 full_block::full_block(

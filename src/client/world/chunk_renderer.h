@@ -4,7 +4,6 @@
 
 #ifndef CHUNK_RENDERER_H
 #define CHUNK_RENDERER_H
-#include <ranges>
 #include <unordered_map>
 
 #include "chunk.h"

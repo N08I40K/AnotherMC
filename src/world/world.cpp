@@ -6,7 +6,7 @@
 
 #include "chunk.h"
 
-world::world() { load_chunk({0, 0}); }
+world::world(): chunks() { /*load_chunk({0, 0});*/ }
 
 world::~world() = default;
 
@@ -20,22 +20,4 @@ world::get_block(
 		return nullptr;
 
 	return iter->second[pos].get();
-}
-
-void
-world::load_chunk(
-	chunk_pos pos) {
-	if (chunks.contains(pos))
-		return;
-
-	chunks.emplace(pos, chunk{pos});
-}
-
-void
-world::unload_chunk(
-	const chunk_pos pos) {
-	if (!chunks.contains(pos))
-		return;
-
-	chunks.erase(pos);
 }

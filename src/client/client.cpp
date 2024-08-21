@@ -10,7 +10,10 @@
 #include "render/gl_render_engine.h"
 
 #include <print>
+#include <thread>
 #include <glm/ext/matrix_clip_space.hpp>
+
+#include "network/client/client_session.h"
 
 gl_vao_ptr
 client::generate_sample(
@@ -59,8 +62,17 @@ client::client()
 
 	set_mouse_cursor_mode(cursor_mode::CURSOR_DISABLED);
 
+	std::println("Client init! Wait 3 sec for server initialization...");
+	std::this_thread::sleep_for(std::chrono::seconds(3));
+	std::println("Connecting...");
+	network = std::make_unique<network::client_session>("127.0.0.1:20512");
+	network->start_thread();
+	std::println("Connected?");
+
 	init_completed = true;
 }
+
+client::~client() = default;
 
 void
 client::set_mouse_cursor_mode(
@@ -196,7 +208,6 @@ client::frame() {
 	}
 
 	auto position = camera.get_position();
-	std::println("{} {} {}", position.x, position.y, position.z);
 
 	//
 	{

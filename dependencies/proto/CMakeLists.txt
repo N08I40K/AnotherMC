@@ -14,3 +14,4 @@ target_sources(${PROJECT_NAME}
         PUBLIC
         ${PROTO_HDRS}
 )
+target_include_directories(${PROJECT_NAME} INTERFACE "${CMAKE_BINARY_DIR}/dependencies/proto")

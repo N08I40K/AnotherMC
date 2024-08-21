@@ -6,4 +6,5 @@
 #include "world/entity/entity.h"
 #include "world/entity/player.h"
 
+template<>
 registry<entity>::registry() { add("player", std::make_unique<entities::player>()); }

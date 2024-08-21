@@ -14,7 +14,7 @@
 
 template <util::Cloneable T>
 class registry {
-	std::map<std::string, std::unique_ptr<T*> > by_name;
+	std::map<std::string, std::unique_ptr<T> > by_name;
 	std::vector<T*>                             by_idx;
 
 public:
@@ -27,7 +27,7 @@ public:
 		if (by_name.contains(name))
 			throw std::runtime_error("registry::add: duplicate name");
 
-		by_name[name] = std::move(base);
+		by_name.emplace(name, std::move(base));
 		by_idx.emplace_back(by_name[name].get());
 
 		return by_idx.size() - 1;

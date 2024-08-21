@@ -6,6 +6,8 @@
 
 #include <print>
 
+#include "server_session.h"
+
 using namespace boost::asio;
 using ip::tcp;
 
@@ -19,7 +21,7 @@ server::start_accept() {
 	acceptor.async_accept([this](
 	auto ec,
 	auto sock) {
-			server::accept_callback(ec, sock);
+			server::accept_callback(ec, std::move(sock));
 		});
 }
 
@@ -32,11 +34,17 @@ server::accept_callback( // NOLINT(*-convert-member-functions-to-static)
 		return;
 
 	std::println("server::accept_callback(): Новое подключение!");
+	auto session = server_session::create(std::move(sock));
+
+	sessions.emplace_back(session);
+	if (new_connection_handler != nullptr)
+		new_connection_handler(session);
 }
 
 void
 server::thread() {
 	std::println("Server thread started!");
+	start_accept();
 	while (!stop)
 		io_context.run();
 	std::println("Server thread stopped!");
@@ -44,7 +52,7 @@ server::thread() {
 
 void
 server::start_thread() {
-	stop = false;
+	stop      = false;
 	io_thread = std::thread(&server::thread, this);
 }
 

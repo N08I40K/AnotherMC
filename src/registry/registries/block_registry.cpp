@@ -6,6 +6,7 @@
 #include "world/block.h"
 #include "world/block/simple_block.h"
 
+template<>
 registry<block>::registry() {
 	add("stone", std::make_unique<simple_block>("stone"));
 	add("grass", std::make_unique<simple_block>("grass"));

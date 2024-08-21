@@ -12,12 +12,12 @@ public:
 	void
 	load_chunk(
 		chunk_pos pos) {
-		auto& chunks = get_chunks();
-
-		if (chunks.contains(pos))
-			return;
-
-		auto& block_registry = game::
+		// auto& chunks = get_chunks();
+		//
+		// if (chunks.contains(pos))
+		// 	return;
+		//
+		// auto& block_registry = game::
 	}
 };
 

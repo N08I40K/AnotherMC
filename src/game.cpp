@@ -5,15 +5,17 @@
 #include "game.h"
 
 #include "client/client.h"
-#include "registry/registry.h"
 #include "server/server.h"
 
 std::unique_ptr<game> game::instance = nullptr;
 
-game::game() {}
+game::game() {
+	server = std::make_unique<::server>();
+	client = std::make_unique<::client>();
+}
 
 void
-game::init() { instance = std::make_unique<game>(); }
+game::init() { instance = std::unique_ptr<game>(new game()); }
 
 game&
 game::get_instance() { return *instance; }

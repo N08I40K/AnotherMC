@@ -13,6 +13,10 @@
 #include "render/gl_vao.h"
 #include "render/gl_window.h"
 
+namespace network {
+class client_session;
+}
+
 struct gl_uniform_world_data {
 	glm::mat4 projection{1.F};
 	glm::mat4 view{1.F};
@@ -33,7 +37,10 @@ public:
 private:
 	static client* instance;
 
+	std::unique_ptr<network::client_session> network{nullptr};
+
 	gl_window window;
+	gl_camera camera;
 
 	gl_shader_program_ptr shader_program;
 	gl_vao_ptr            vao;
@@ -41,8 +48,6 @@ private:
 
 	gl_ubo_ptr world_ubo;
 	gl_ubo_ptr model_ubo;
-
-	gl_camera camera;
 
 	// input
 	std::array<bool, GLFW_KEY_LAST + 1> keys{false};
@@ -64,6 +69,7 @@ private:
 
 public:
 	client();
+	~client();
 
 	void
 	set_mouse_cursor_mode(
@@ -105,7 +111,8 @@ public:
 	[[nodiscard]] static client*
 	get_instance() { return instance; }
 
-	void tick();
+	void
+	tick();
 };
 
 #endif //CLIENT_H

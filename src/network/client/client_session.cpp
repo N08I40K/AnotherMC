@@ -15,15 +15,15 @@ using ip::tcp;
 namespace network {
 void
 client_session::receive_packet() {
-	auto packet = transfer_context::create_receive();
+	auto  packet = transfer_context::create_receive();
+	auto& size   = packet->get_size_for_receive();
 
-	auto callback = [this, packet](
+	auto callback = [this, packet_raw = packet.release()](
 		auto ec_cb,
 		auto bytes_transferred_cb) {
-		this->receive_packet_header_callback(ec_cb, bytes_transferred_cb, std::move(packet));
+		this->receive_packet_header_callback(ec_cb, bytes_transferred_cb, packet_t(packet_raw));
 	};
 
-	auto& size = packet->get_size_for_receive();
 	async_read(socket, buffer(&size, sizeof(size)), transfer_all(), callback);
 }
 
@@ -35,13 +35,13 @@ client_session::receive_packet_header_callback(
 	if (error)
 		throw boost::system::system_error(error);
 
-	auto callback = [this, packet](
+	auto& data = packet->get_data_for_receive();
+
+	auto callback = [this, packet_raw = packet.release()](
 		auto ec_cb,
 		auto bytes_transferred_cb) {
-		this->receive_packet_data_callback(ec_cb, bytes_transferred_cb, std::move(packet));
+		this->receive_packet_data_callback(ec_cb, bytes_transferred_cb, packet_t(packet_raw));
 	};
-
-	auto& data = packet->get_data_for_receive();
 	async_read(socket, buffer(data.data(), data.size()), transfer_all(), callback);
 }
 
@@ -59,6 +59,8 @@ client_session::receive_packet_data_callback(
 
 void
 client_session::thread() {
+	receive_packet();
+
 	while (!stop)
 		io_context.run();
 }
@@ -93,7 +95,7 @@ client_session::~client_session() {
 
 void
 client_session::start_thread() {
-	stop = false;
+	stop      = false;
 	io_thread = std::thread(&client_session::thread, this);
 }
 
@@ -104,7 +106,7 @@ client_session::send_packet(
 	async_write(socket, buffer(data_for_send.data(), data_for_send.size()), transfer_all());
 }
 
-std::vector<client_session::packet_t>
+std::vector<packet_t>
 client_session::get_received_packets() {
 	std::lock_guard lock(mutex);
 	return std::move(received_packets);

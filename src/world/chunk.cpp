@@ -5,11 +5,11 @@
 #include "chunk.h"
 
 #include "block/simple_block.h"
-#include "model/full_block.h"
+// #include "model/full_block.h"
 
 
 chunk::chunk(
-	chunk_pos pos) {}
+	chunk_pos pos): position(pos) {}
 
 void
 chunk::serialize(

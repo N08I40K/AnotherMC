@@ -6,16 +6,18 @@
 #define SERVER_SESSION_H
 #include <boost/asio/ip/tcp.hpp>
 
-class transfer_context;
+#include "network/packet_id.h"
 
 namespace network {
+class transfer_context;
+
 class server_session {
 	std::mutex mutex;
 
 	boost::asio::ip::tcp::socket socket;
 	std::string                  ip;
 
-	std::vector<std::unique_ptr<transfer_context> > received_packets;
+	std::vector<packet_t> received_packets;
 
 	explicit
 	server_session(
@@ -23,14 +25,14 @@ class server_session {
 
 	void
 	receive_header_callback(
-		const boost::system::error_code&  error,
-		[[maybe_unused]] size_t           bytes_transferred,
-		std::unique_ptr<transfer_context> transfer_context);
+		const boost::system::error_code& error,
+		[[maybe_unused]] size_t          bytes_transferred,
+		packet_t                         packet);
 	void
 	receive_data_callback(
-		const boost::system::error_code&  error,
-		[[maybe_unused]] size_t           bytes_transferred,
-		std::unique_ptr<transfer_context> transfer_context);
+		const boost::system::error_code& error,
+		[[maybe_unused]] size_t          bytes_transferred,
+		packet_t                         transfer_context);
 
 	void
 	send_packet_callback(
@@ -41,7 +43,7 @@ class server_session {
 	receive();
 
 public:
-	static std::unique_ptr<server_session>
+	static std::shared_ptr<server_session>
 	create(
 		boost::asio::ip::tcp::socket socket);
 
@@ -51,6 +53,9 @@ public:
 	void
 	send(
 		transfer_context& transfer_ctx);
+
+	std::vector<packet_t>
+	get_received_packets();
 };
 } // network
 

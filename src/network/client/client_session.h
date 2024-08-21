@@ -8,21 +8,22 @@
 #include <vector>
 #include <boost/asio/ip/tcp.hpp>
 
-class transfer_context;
+#include "network/packet_id.h"
 
 namespace network {
+class transfer_context;
+
 class client_session {
 	using socket_t = boost::asio::ip::tcp::socket;
-	using packet_t = std::unique_ptr<transfer_context>;
+
+	bool                    stop{};
+	boost::asio::io_context io_context{};
+	std::thread             io_thread;
 
 	std::vector<packet_t> received_packets;
 	socket_t              socket;
 
 	std::mutex mutex;
-
-	bool                    stop{};
-	boost::asio::io_context io_context;
-	std::thread             io_thread;
 
 	void
 	receive_packet();

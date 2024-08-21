@@ -8,7 +8,7 @@
 #include "world/chunk.h"
 
 namespace client {
-class chunk : public chunk {
+class chunk : public ::chunk {
 	gl_vao vao;
 
 public:

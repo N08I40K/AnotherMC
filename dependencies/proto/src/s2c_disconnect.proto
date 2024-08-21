@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+message s2c_disconnect {
+  string reason = 1;
+}

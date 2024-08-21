@@ -10,7 +10,7 @@
 class living_entity : public entity {
 	glm::vec3 velocity{0.F};
 
-	float health{get_max_health()};
+	float health{0.F};
 
 public:
 	living_entity() = default;

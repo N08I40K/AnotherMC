@@ -1,0 +1,6 @@
+syntax = "proto3";
+
+message look {
+  float pitch = 1;
+  float yaw = 2;
+}

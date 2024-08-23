@@ -20,6 +20,7 @@ vcpkg_add_package(glm)
 vcpkg_add_package(range-v3)
 vcpkg_add_package(boost)
 vcpkg_add_package(protobuf)
+vcpkg_add_package(stduuid)
 
 set(CMAKE_CXX_STANDARD 23)
 
@@ -37,6 +38,7 @@ endif ()
 # Compiler definitions
 string(REPLACE "\\" "/" ASSERT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/assets")
 target_compile_definitions(${PROJECT_NAME} PRIVATE "ASSERT_DIR=\"${ASSERT_DIR}\"")
+target_compile_definitions(${PROJECT_NAME} PRIVATE "UUID_SYSTEM_GENERATOR")
 
 # Sources
 target_sources(${PROJECT_NAME} PRIVATE
@@ -83,3 +85,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${Boost_LIBRARIES})
 find_package(protobuf CONFIG REQUIRED)
 add_subdirectory("dependencies/proto")
 target_link_libraries(${PROJECT_NAME} PRIVATE another-mc-proto)
+
+find_package(stduuid CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE stduuid)

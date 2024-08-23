@@ -12,6 +12,7 @@
 #include "render/gl_ubo.h"
 #include "render/gl_vao.h"
 #include "render/gl_window.h"
+#include "game.h"
 
 namespace network {
 class client_session;
@@ -26,6 +27,10 @@ struct gl_uniform_model_data {
 	glm::mat4 model{1.F};
 };
 
+namespace entities {
+class player;
+}
+
 class client {
 public:
 	enum class cursor_mode {
@@ -39,12 +44,13 @@ private:
 
 	std::unique_ptr<network::client_session> network{nullptr};
 
+	world_ptr         world{nullptr};
+	entities::player* player{nullptr};
+
 	gl_window window;
 	gl_camera camera;
 
 	gl_shader_program_ptr shader_program;
-	gl_vao_ptr            vao;
-	gl_vao_ptr            vao2;
 
 	gl_ubo_ptr world_ubo;
 	gl_ubo_ptr model_ubo;

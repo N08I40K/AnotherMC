@@ -3,6 +3,7 @@
 //
 
 #include "living_entity.h"
+#include "util/bstream.h"
 
 living_entity::living_entity(
 	const glm::vec3& position,
@@ -11,18 +12,18 @@ living_entity::living_entity(
 	, velocity(velocity) {}
 
 void
-living_entity::read_state(
-	std::istream& stream) {
-	entity::read_state(stream);
+living_entity::parse_data(
+	stdn::brstream& stream) {
+	entity::parse_data(stream);
 
 	stream >> velocity.x >> velocity.y >> velocity.z;
 	stream >> health;
 }
 
 void
-living_entity::write_state(
-	std::ostream& stream) {
-	entity::write_state(stream);
+living_entity::serialize_data(
+	stdn::bwstream& stream) {
+	entity::serialize_data(stream);
 
 	stream << velocity.x << velocity.y << velocity.z;
 	stream << health;

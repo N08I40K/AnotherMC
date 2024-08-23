@@ -13,7 +13,16 @@
 #include <thread>
 #include <glm/ext/matrix_clip_space.hpp>
 
+#include "network/transfer_context.h"
 #include "network/client/client_session.h"
+#include "world/world.h"
+#include "world/entity/entity.h"
+#include "world/entity/player.h"
+
+#include <s2c_spawn.pb.h>
+
+#include "util/bstream.h"
+#include "util/entity.h"
 
 gl_vao_ptr
 client::generate_sample(
@@ -48,9 +57,6 @@ client::client()
 	if (!textures->load())
 		return;
 
-	vao  = generate_sample("stone");
-	vao2 = generate_sample("not.stone");
-
 	world_ubo      = std::make_unique<gl_ubo>(sizeof(gl_uniform_world_data));
 	model_ubo      = std::make_unique<gl_ubo>(sizeof(gl_uniform_model_data));
 	shader_program = std::make_unique<gl_shader_program>();
@@ -68,6 +74,8 @@ client::client()
 	network = std::make_unique<network::client_session>("127.0.0.1:20512");
 	network->start_thread();
 	std::println("Connected?");
+
+	world = std::make_unique<::world>();
 
 	init_completed = true;
 }
@@ -281,6 +289,27 @@ bool
 client::is_init_completed() const { return init_completed; }
 
 void
-client::tick() {}
+client::tick() {
+	if (network == nullptr)
+		return;
+
+	for (auto  packets = network->get_received_packets();
+	     auto& packet : packets) {
+		switch (auto [packet_id, packet_data] = packet->take_data(); packet_id) {
+		case network::packet_id::S2C_SPAWN: {
+			s2c_spawn spawn_packet;
+			spawn_packet.ParseFromString(packet_data);
+
+			player = dynamic_cast<entities::player*>(
+				game::get_instance().get_registries().get_entities()["player"]->clone());
+			utils::entity::parse_data(player, spawn_packet.data());
+
+			std::println("spawn");
+			break;
+		}
+		default: break;
+		}
+	}
+}
 
 client* client::instance = nullptr;

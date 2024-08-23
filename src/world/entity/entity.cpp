@@ -6,6 +6,8 @@
 
 #include "game.h"
 
+#include "util/bstream.h"
+
 entity::entity(
 	const glm::vec3& position): position(position) {}
 
@@ -15,15 +17,20 @@ void
 entity::tick() {}
 
 void
-entity::read_state(
-	std::istream& stream) {
+entity::parse_data(
+	stdn::brstream& stream) {
+	std::array<uuids::uuid::value_type, 16> uuid_data{};
+	stream >> uuid_data;
+	uuid = uuids::uuid(uuid_data);
+
 	stream >> position.x >> position.y >> position.z;
 	stream >> look.x >> look.y;
 }
 
 void
-entity::write_state(
-	std::ostream& stream) {
+entity::serialize_data(
+	stdn::bwstream& stream) {
+	stream << uuid.as_bytes();
 	stream << position.x << position.y << position.z;
 	stream << look.x << look.y;
 }

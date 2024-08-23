@@ -14,6 +14,9 @@ using client_ptr = std::unique_ptr<client>;
 class server;
 using server_ptr = std::unique_ptr<server>;
 
+class world;
+using world_ptr = std::unique_ptr<world>;
+
 class game {
 	static std::unique_ptr<game> instance;
 
@@ -31,6 +34,7 @@ public:
 
 	static void
 	init();
+
 	static game&
 	get_instance();
 

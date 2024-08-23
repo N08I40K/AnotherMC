@@ -16,7 +16,7 @@ using packet_t  = std::unique_ptr<transfer_context>;
 enum struct packet_id : packet_id_t {
 	CONNECT_REQUEST = 0,
 	DISCONNECT,
-	SPAWN
+	S2C_SPAWN
 };
 }
 

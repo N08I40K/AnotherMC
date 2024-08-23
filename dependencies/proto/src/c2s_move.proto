@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+import "vector3.proto";
+import "look.proto";
+
+message c2s_move {
+  vector3 position = 1;
+  vector3 velocity = 2;
+  look look = 3;
+}

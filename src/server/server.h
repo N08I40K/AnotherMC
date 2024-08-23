@@ -19,7 +19,6 @@ class server;
 }
 
 class server {
-	world                            world;
 	std::unique_ptr<network::server> network;
 
 	void
@@ -31,9 +30,6 @@ class server {
 public:
 	server();
 	~server();
-
-	[[nodiscard]] ::world&
-	get_world() { return world; }
 
 	void
 	tick();

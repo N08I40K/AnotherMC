@@ -9,11 +9,19 @@
 #include "block.h"
 #include "math/chunk_pos.h"
 
+class entity;
 class block_pos;
 class chunk;
 
+using entity_ptr = std::unique_ptr<entity>;
+
+namespace uuids {
+class uuid;
+}
+
 class world {
-	std::unordered_map<chunk_pos, chunk> chunks;
+	std::unordered_map<chunk_pos, chunk>                      chunks;
+	std::unordered_map<uuids::uuid, std::unique_ptr<entity> > entities;
 
 protected:
 	std::unordered_map<chunk_pos, chunk>&
@@ -21,11 +29,31 @@ protected:
 
 public:
 	world();
-	virtual ~world();
+	~world();
 
 	block*
 	get_block(
 		block_pos pos);
+
+	[[nodiscard]] std::unordered_map<uuids::uuid, std::unique_ptr<entity> >
+	get_entities() const { return entities; }
+
+	[[nodiscard]] entity*
+	get_entity(
+		uuids::uuid uuid);
+
+	uuids::uuid
+	add_entity(
+		entity*          entity,
+		const glm::vec3& position);
+
+	chunk&
+	load_chunk(
+		chunk_pos pos);
+
+	void
+	unload_chunk(
+		chunk_pos pos);
 };
 
 #endif //WORLD_H

@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+message entity_data {
+  bytes data = 1;
+}

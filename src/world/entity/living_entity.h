@@ -20,12 +20,12 @@ public:
 		const glm::vec3& velocity);
 
 	void
-	read_state(
-		std::istream& stream) override;
+	parse_data(
+		stdn::brstream& stream) override;
 
 	void
-	write_state(
-		std::ostream& stream) override;
+	serialize_data(
+		stdn::bwstream& stream) override;
 
 	[[nodiscard]] virtual float
 	get_max_health() const = 0;

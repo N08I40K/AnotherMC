@@ -25,7 +25,7 @@ public:
 	entity() = default;
 
 	entity(
-		entity&& other) noexcept {
+		const entity& other) noexcept {
 		uuid = uuids::uuid_system_generator{}();
 
 		position = other.position;
@@ -52,7 +52,7 @@ public:
 
 	virtual void
 	serialize_data(
-		stdn::bwstream& stream);
+		stdn::bwstream& stream) const;
 
 	[[nodiscard]] glm::vec3
 	get_position() const;

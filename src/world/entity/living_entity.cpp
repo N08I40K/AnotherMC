@@ -22,7 +22,7 @@ living_entity::parse_data(
 
 void
 living_entity::serialize_data(
-	stdn::bwstream& stream) {
+	stdn::bwstream& stream) const {
 	entity::serialize_data(stream);
 
 	stream << velocity.x << velocity.y << velocity.z;

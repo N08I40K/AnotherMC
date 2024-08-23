@@ -25,7 +25,7 @@ public:
 
 	void
 	serialize_data(
-		stdn::bwstream& stream) override;
+		stdn::bwstream& stream) const override;
 
 	[[nodiscard]] virtual float
 	get_max_health() const = 0;

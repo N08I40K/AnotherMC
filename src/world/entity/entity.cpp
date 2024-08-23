@@ -29,7 +29,7 @@ entity::parse_data(
 
 void
 entity::serialize_data(
-	stdn::bwstream& stream) {
+	stdn::bwstream& stream) const {
 	stream << uuid.as_bytes();
 	stream << position.x << position.y << position.z;
 	stream << look.x << look.y;

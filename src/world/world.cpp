@@ -7,8 +7,6 @@
 #include "chunk.h"
 #include "game.h"
 
-#include <stduuid/uuid.h>
-
 #include "entity/entity.h"
 
 world::world() = default;
@@ -24,8 +22,11 @@ world::get_block(
 	if (iter == chunks.end())
 		return nullptr;
 
-	return iter->second[pos].get();
+	return (*iter->second)[pos].get();
 }
+
+const std::unordered_map<uuids::uuid, std::unique_ptr<entity> >&
+world::get_entities() const { return entities; }
 
 entity*
 world::get_entity(
@@ -54,10 +55,10 @@ world::load_chunk(
 	const chunk_pos pos) {
 	if (const auto iter = chunks.find(pos);
 		iter != chunks.end())
-		return iter->second;
+		return *iter->second;
 
-	chunks.emplace(pos, chunk{pos});
-	auto& chunk = chunks.at(pos);
+	chunks.emplace(pos, std::make_unique<chunk>(pos));
+	auto& chunk = *chunks.at(pos);
 
 	auto* stone_instance = game::get_instance()
 	                       .get_registries()

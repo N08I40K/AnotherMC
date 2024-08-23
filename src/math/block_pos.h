@@ -36,9 +36,9 @@ public:
 	[[nodiscard]] glm::ivec3
 	get_in_chunk_pos() const {
 		return {
-			static_cast<int>(pos.x % chunk_pos::max_xz),
-			pos.y,
-			static_cast<int>(pos.z % chunk_pos::max_xz)
+			std::abs(static_cast<int>(pos.x % chunk_pos::max_xz)),
+			std::abs(pos.y),
+			std::abs(static_cast<int>(pos.z % chunk_pos::max_xz))
 		};
 	}
 };

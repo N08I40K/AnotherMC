@@ -8,23 +8,21 @@
 
 #include "block.h"
 #include "math/chunk_pos.h"
+#include <stduuid/uuid.h>
 
 class entity;
 class block_pos;
 class chunk;
 
 using entity_ptr = std::unique_ptr<entity>;
-
-namespace uuids {
-class uuid;
-}
+using chunk_ptr  = std::unique_ptr<chunk>;
 
 class world {
-	std::unordered_map<chunk_pos, chunk>                      chunks;
+	std::unordered_map<chunk_pos, chunk_ptr>                  chunks;
 	std::unordered_map<uuids::uuid, std::unique_ptr<entity> > entities;
 
 protected:
-	std::unordered_map<chunk_pos, chunk>&
+	std::unordered_map<chunk_pos, chunk_ptr>&
 	get_chunks() { return chunks; };
 
 public:
@@ -35,8 +33,8 @@ public:
 	get_block(
 		block_pos pos);
 
-	[[nodiscard]] std::unordered_map<uuids::uuid, std::unique_ptr<entity> >
-	get_entities() const { return entities; }
+	[[nodiscard]] const std::unordered_map<uuids::uuid, std::unique_ptr<entity> >&
+	get_entities() const;
 
 	[[nodiscard]] entity*
 	get_entity(

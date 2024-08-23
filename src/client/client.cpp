@@ -182,58 +182,58 @@ client::frame() {
 	gl_render_engine::set_shader_program(shader_program);
 
 	gl_render_engine::set_texture(textures->get_atlas()->get_texture());
-
 	//
-	{
-		gl_render_engine::set_vao(vao);
-
-		gl_uniform_model_data model_data{};
-		auto&                 transform = model_data.model;
-		transform                       = scale(transform, glm::vec3(0.5F, 0.5F, 0.5F));
-		// transform = rotate(transform, static_cast<float>(glfwGetTime() * 0.5), glm::vec3(0.F, 1.F, 0.F));
-		// transform = rotate(transform, static_cast<float>(glfwGetTime() * 0.75), glm::vec3(0.F, 0.F, 1.F));
-		model_ubo->set_data(&model_data);
-
-		gl_render_engine::set_ubo(model_ubo, 1);
-		gl_render_engine::render(vao->get_ebo_size());
-	}
-
+	// //
+	// {
+	// 	gl_render_engine::set_vao(vao);
 	//
-	{
-		gl_render_engine::set_vao(vao2);
-
-		gl_uniform_model_data model_data{};
-		auto&                 transform = model_data.model;
-		transform                       = scale(transform, glm::vec3(0.5F, 0.5F, 0.5F));
-		transform                       = translate(transform, glm::vec3(2.F, 0.F, 0.f));
-
-		// transform = rotate(transform, static_cast<float>(glfwGetTime() * 0.5), glm::vec3(0.F, 1.F, 0.F));
-		// transform = rotate(transform, static_cast<float>(glfwGetTime() * 0.75), glm::vec3(0.F, 0.F, 1.F));
-		model_ubo->set_data(&model_data);
-
-		gl_render_engine::set_ubo(model_ubo, 1);
-		gl_render_engine::render(vao2->get_ebo_size());
-	}
-
-	auto position = camera.get_position();
-
+	// 	gl_uniform_model_data model_data{};
+	// 	auto&                 transform = model_data.model;
+	// 	transform                       = scale(transform, glm::vec3(0.5F, 0.5F, 0.5F));
+	// 	// transform = rotate(transform, static_cast<float>(glfwGetTime() * 0.5), glm::vec3(0.F, 1.F, 0.F));
+	// 	// transform = rotate(transform, static_cast<float>(glfwGetTime() * 0.75), glm::vec3(0.F, 0.F, 1.F));
+	// 	model_ubo->set_data(&model_data);
 	//
-	{
-		gl_render_engine::set_vao(vao2);
-
-		gl_uniform_model_data model_data{};
-		auto&                 transform = model_data.model;
-		transform                       = scale(transform, glm::vec3(0.5F, 0.5F, 0.5F));
-		transform                       = translate(transform, glm::vec3(2.F, 2.F, -2.f));
-
-		// transform = rotate(transform, static_cast<float>(glfwGetTime() * 0.5), glm::vec3(0.F, 1.F, 0.F));
-		// transform = rotate(transform, static_cast<float>(glfwGetTime() * 0.75), glm::vec3(0.F, 0.F, 1.F));
-		model_ubo->set_data(&model_data);
-
-		gl_render_engine::set_ubo(model_ubo, 1);
-		gl_render_engine::render(vao2->get_ebo_size());
-	}
-
+	// 	gl_render_engine::set_ubo(model_ubo, 1);
+	// 	gl_render_engine::render(vao->get_ebo_size());
+	// }
+	//
+	// //
+	// {
+	// 	gl_render_engine::set_vao(vao2);
+	//
+	// 	gl_uniform_model_data model_data{};
+	// 	auto&                 transform = model_data.model;
+	// 	transform                       = scale(transform, glm::vec3(0.5F, 0.5F, 0.5F));
+	// 	transform                       = translate(transform, glm::vec3(2.F, 0.F, 0.f));
+	//
+	// 	// transform = rotate(transform, static_cast<float>(glfwGetTime() * 0.5), glm::vec3(0.F, 1.F, 0.F));
+	// 	// transform = rotate(transform, static_cast<float>(glfwGetTime() * 0.75), glm::vec3(0.F, 0.F, 1.F));
+	// 	model_ubo->set_data(&model_data);
+	//
+	// 	gl_render_engine::set_ubo(model_ubo, 1);
+	// 	gl_render_engine::render(vao2->get_ebo_size());
+	// }
+	//
+	// auto position = camera.get_position();
+	//
+	// //
+	// {
+	// 	gl_render_engine::set_vao(vao2);
+	//
+	// 	gl_uniform_model_data model_data{};
+	// 	auto&                 transform = model_data.model;
+	// 	transform                       = scale(transform, glm::vec3(0.5F, 0.5F, 0.5F));
+	// 	transform                       = translate(transform, glm::vec3(2.F, 2.F, -2.f));
+	//
+	// 	// transform = rotate(transform, static_cast<float>(glfwGetTime() * 0.5), glm::vec3(0.F, 1.F, 0.F));
+	// 	// transform = rotate(transform, static_cast<float>(glfwGetTime() * 0.75), glm::vec3(0.F, 0.F, 1.F));
+	// 	model_ubo->set_data(&model_data);
+	//
+	// 	gl_render_engine::set_ubo(model_ubo, 1);
+	// 	gl_render_engine::render(vao2->get_ebo_size());
+	// }
+	//
 	gl_render_engine::swap(window.get_window());
 
 	return true;
